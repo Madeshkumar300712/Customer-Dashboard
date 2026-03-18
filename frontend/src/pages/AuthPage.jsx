@@ -42,9 +42,9 @@ export default function AuthPage() {
             <Zap size={24} color="#080b11" strokeWidth={2.5} />
           </div>
           <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-0.03em" }}>
-            Halle<span style={{ color: "var(--accent)" }}>yx</span>
+            Madd<span style={{ color: "var(--accent)" }}>y</span>
           </h1>
-          <p style={{ color: "var(--text-muted)", fontSize: 17, marginTop: 4 }}>Dashboard Builder Platform</p>
+          <p style={{ color: "var(--text-muted)", fontSize: 17, marginTop: 4 }}>Customer Dashboard Platform</p>
         </div>
 
         <div className="card" style={{ padding: 32 }}>

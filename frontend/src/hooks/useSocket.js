@@ -3,39 +3,32 @@ import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 import { pushNotification } from "../store/notificationSlice";
 
-let socket = null;
+let socket;
 
 export function useSocket() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!socket) {
-      socket = io(import.meta.env.VITE_SOCKET_URL || "http://localhost:5000", {
-        transports: ["websocket"],
-        reconnection: true,
-        reconnectionAttempts: 5,
-      });
+    // Use the backend URL from env variable, strip /api from the end
+    const backendUrl = (import.meta.env.VITE_API_URL || "http://localhost:5000/api")
+      .replace("/api", "");
 
-      socket.on("connect", () => {
-        console.log("✅ Socket connected:", socket.id);
-      });
+    socket = io(backendUrl, {
+      transports: ["websocket", "polling"],
+      reconnectionAttempts: 3,
+    });
 
-      socket.on("notification", (data) => {
-        dispatch(pushNotification(data));
-      });
+    socket.on("notification", (data) => {
+      dispatch(pushNotification(data));
+    });
 
-      socket.on("disconnect", () => {
-        console.log("❌ Socket disconnected");
-      });
-
-      socket.on("connect_error", (err) => {
-        console.error("Socket connection error:", err.message);
-      });
-    }
+    socket.on("connect_error", () => {
+      // Silent fail — notifications won't work but app still functions
+      console.log("Socket connection failed - continuing without real-time");
+    });
 
     return () => {
-      socket?.connect();
-      socket = null;
+      socket?.disconnect();
     };
-  }, [dispatch]);
+  }, []);
 }
