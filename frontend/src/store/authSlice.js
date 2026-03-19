@@ -20,10 +20,11 @@ export const registerUser = createAsyncThunk("auth/register", async (data, { rej
 });
 
 const stored = localStorage.getItem("hx_user");
+const parsedUser = stored && stored !== "undefined" ? JSON.parse(stored) : null;
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: { user: stored ? JSON.parse(stored) : null, loading: false, error: null },
+  initialState: { user: parsedUser, loading: false, error: null },
   reducers: {
     logout: (s) => {
       localStorage.removeItem("hx_token"); localStorage.removeItem("hx_user");

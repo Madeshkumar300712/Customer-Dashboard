@@ -34,7 +34,8 @@ app.get("/", (req, res) => {
   res.json({ status: "ok", message: "Maddy's API is running" });
 });
 
-app.use("/api/auth/login",          require("./routes/authRoutes"));
+// ✅ Correct
+app.use("/api/auth",          require("./routes/authRoutes"));
 app.use("/api/orders",        require("./routes/orderRoutes"));
 app.use("/api/dashboard",     require("./routes/dashboardRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));

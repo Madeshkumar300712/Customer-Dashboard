@@ -34,12 +34,12 @@ export function generateInvoicePDF(order) {
   doc.setTextColor(8, 11, 17);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(26);
-  doc.text("HALLEYX", 18, 22);
+  doc.text("MADDY", 18, 22);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
-  doc.text("Dashboard Builder Platform", 18, 30);
-  doc.text("support@halleyx.com  ·  www.halleyx.com", 18, 36);
+  doc.text("Customer Dashboard Builder Platform", 18, 30);
+  doc.text("support@Maddy.com  ·  www.Maddy.com", 18, 36);
 
   // INVOICE label
   doc.setFont("helvetica", "bold");
@@ -181,4 +181,65 @@ export function generateInvoicePDF(order) {
   doc.text("Halleyx Dashboard Builder Platform  ·  Confidential", PW / 2, pageH - 6, { align: "center" });
 
   doc.save(`invoice_${String(order._id).slice(-8)}_${order.firstName}_${order.lastName}.pdf`);
+}
+export function downloadRevenueSummary(orders) {
+  const byProduct = {};
+  orders.forEach(o => {
+    if (!byProduct[o.product]) byProduct[o.product] = { revenue: 0, count: 0 };
+    byProduct[o.product].revenue += o.totalAmount || 0;
+    byProduct[o.product].count  += 1;
+  });
+
+  const headers = ["Product", "Order Count", "Total Revenue", "Avg Order Value"];
+  const rows = Object.entries(byProduct).map(([product, data]) => [
+    product,
+    data.count,
+    `$${data.revenue.toFixed(2)}`,
+    `$${(data.revenue / data.count).toFixed(2)}`,
+  ]);
+
+  const csv = [headers, ...rows]
+    .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(","))
+    .join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url;
+  a.download = `revenue_summary_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+export function downloadStatusReport(orders) {
+  const byStatus = {};
+  orders.forEach(o => {
+    byStatus[o.status] = (byStatus[o.status] || 0) + 1;
+  });
+
+  const total   = orders.length;
+  const headers = ["Status", "Count", "Percentage", "Total Revenue"];
+  const rows    = Object.entries(byStatus).map(([status, count]) => {
+    const revenue = orders
+      .filter(o => o.status === status)
+      .reduce((s, o) => s + (o.totalAmount || 0), 0);
+    return [
+      status,
+      count,
+      `${((count / total) * 100).toFixed(1)}%`,
+      `$${revenue.toFixed(2)}`,
+    ];
+  });
+
+  const csv = [headers, ...rows]
+    .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(","))
+    .join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url;
+  a.download = `status_report_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }

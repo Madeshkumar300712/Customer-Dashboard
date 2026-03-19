@@ -8,9 +8,15 @@ const EMPTY = {
 };
 
 const COUNTRIES = ["India","United States","Canada","Australia","Singapore","Hong Kong"];
-const PRODUCTS = ["Fiber Internet 300 Mbps","5G Unlimited Mobile Plan","Fiber Internet 1 Gbps","Business Internet 500 Mbps","VoIP Corporate Package"];
+const PRODUCTS = [
+  "iPhone 12", "iPhone 12 Mini", "iPhone 12 Pro", "iPhone 12 Pro Max",
+  "iPhone 13", "iPhone 13 Mini", "iPhone 13 Pro", "iPhone 13 Pro Max",
+  "iPhone 14", "iPhone 14 Plus", "iPhone 14 Pro", "iPhone 14 Pro Max",
+  "iPhone 15", "iPhone 15 Plus", "iPhone 15 Pro", "iPhone 15 Pro Max",
+  "iPhone 16", "iPhone 16 Plus", "iPhone 16 Pro", "iPhone 16 Pro Max",
+];
 const STATUSES = ["Pending","In progress","Completed"];
-const CREATORS = ["Mr. Manoj","Mr. Sultan","Ms. Deepika","Mr. Ganesan"];
+const CREATORS = ["Mr. Madesh","Mr. Jeyanth","Ms. Anu","Mr. Balaji","Ms. Narmadha"];
 
 const required = [
   "firstName","lastName","email","phone","street","city","state","postalCode",
@@ -19,13 +25,7 @@ const required = [
 
 export default function OrderForm({ initial, onClose, onSubmit }) {
   const [form, setForm] = useState(initial || EMPTY);
-  const [errors, setErrors] = useState({
-  customerName: "",
-  product: "",
-  quantity: 0,
-  price: 0,
-  status: "pending"
-});
+  const [errors, setErrors] = useState({});
 
   const set = (k, v) => {
     const updated = { ...form, [k]: v };

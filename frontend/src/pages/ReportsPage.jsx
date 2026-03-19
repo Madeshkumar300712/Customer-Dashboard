@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
-import { downloadCSV, generateInvoicePDF } from "../utils/exportUtils";
 import { useToast } from "../components/ui/Toast";
 import { Download, FileText, BarChart2, Table2, TrendingUp } from "lucide-react";
+import { downloadCSV, generateInvoicePDF, downloadRevenueSummary, downloadStatusReport } from "../utils/exportUtils";
 
 export default function ReportsPage() {
   const orders = useSelector(s => s.orders.items);
@@ -9,8 +9,8 @@ export default function ReportsPage() {
 
   const reports = [
     { title:"Full Orders Export",      desc:"All orders with every field as CSV",                icon:<Table2     size={20}/>, color:"#00d4aa", action:() => { downloadCSV(orders); toast("CSV downloaded!"); } },
-    { title:"Revenue Summary",         desc:"Revenue totals grouped by product",                 icon:<BarChart2  size={20}/>, color:"#3b82f6", action:() => toast("Coming soon — build analytics first") },
-    { title:"Status Report",           desc:"Order counts by status with percentages",           icon:<TrendingUp size={20}/>, color:"#f59e0b", action:() => toast("Coming soon") },
+    { title:"Revenue Summary", desc:"Revenue totals grouped by product",       icon:<BarChart2  size={20}/>, color:"#3b82f6", action:() => { downloadRevenueSummary(orders); toast("Revenue summary downloaded!"); } },
+{ title:"Status Report",   desc:"Order counts by status with percentages", icon:<TrendingUp size={20}/>, color:"#f59e0b", action:() => { downloadStatusReport(orders);   toast("Status report downloaded!");   } },
     { title:"Invoice (Latest Order)",  desc:"PDF invoice for the most recent order",             icon:<FileText   size={20}/>, color:"#ef4444", action:() => { if(orders[0]) generateInvoicePDF(orders[0]); else toast("No orders yet","error"); } },
   ];
 
