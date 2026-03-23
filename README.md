@@ -4,11 +4,9 @@
 
 *Customer Dashboard · 2026 | Built by **Madesh Kumar (Maddy)***
 
-[🌐 Live Demo](#) · [📸 Screenshots](#-screenshots) · [⚡ Quick Start](#-quick-start) · [📖 Docs](#-project-structure)
+[🌐 Live Demo](https://customer-dashboard-653d.vercel.app/) ·
 
 ---
-
-</div>
 
 ## 📌 What is this?
 
